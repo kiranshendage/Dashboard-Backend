@@ -97,22 +97,6 @@ app.get("/search/:key",verifyToken,async (req,resp) =>{
 })
 
 
-// function verifyToken (req,resp,next){
-//     let token = req.headers['authorization'];
-//     if(token){
-//         token = token.split(' ')[1];
-//         jwt.verify(token,jwtkey,(err,valid)=>{
-//             if(err){
-//                 resp.status({result:"please provide valid token"})
-//             }else{
-//                 next();
-//             }
-//         })
-//     }else{
-//         resp.send({result:"Plz add token with header"})
-//     }
-// }
-
 function verifyToken(req, resp, next) {
     let token = req.headers['authorization'];
     if (token) {
