@@ -24,7 +24,7 @@ app.post("/register",async (req,resp)=>{
 })
 
 app.post("/login",async(req,resp)=>{
-    console.log(req.body);
+    // console.log(req.body);
     if(req.body.password && req.body.email){
     let user = await User.findOne(req.body).select("-password");
         if(user){
@@ -76,9 +76,7 @@ app.get("/product/:id",verifyToken,async (req,resp) =>{
 app.put("/product/:id",verifyToken,async(req,resp)=>{
     let result = await Product.updateOne(
         {_id: req.params.id},
-        {
-            $set : req.body
-        }
+        {$set : req.body}
     )
    
     resp.send(result);
