@@ -43,14 +43,14 @@ app.post("/login",async(req,resp)=>{
     }
 }) 
 
-app.post("/add/product",verifyToken,async(req,resp)=>{
+app.post("/add/product",async(req,resp)=>{
     let product = new Product(req.body);
     let result = await product.save();
     resp.send(result);
 })
 
 
-app.get("/products",verifyToken,async(req,resp)=>{
+app.get("/products",async(req,resp)=>{
     let products = await Product.find();
     if(products.length>0){
         resp.send(products)
@@ -59,12 +59,12 @@ app.get("/products",verifyToken,async(req,resp)=>{
     }
 })
 
-app.delete("/Product/:id",verifyToken,async(req,resp)=>{
+app.delete("/Product/:id",async(req,resp)=>{
     const result =await Product.deleteOne({_id:req.params.id})
     resp.send(result);
 })
 
-app.get("/product/:id",verifyToken,async (req,resp) =>{
+app.get("/product/:id",async (req,resp) =>{
     let result = await Product.findOne({_id: req.params.id});
     if(result){
     resp.send(result);
@@ -73,7 +73,7 @@ app.get("/product/:id",verifyToken,async (req,resp) =>{
     }
 })
 
-app.put("/product/:id",verifyToken,async(req,resp)=>{
+app.put("/product/:id",async(req,resp)=>{
     let result = await Product.updateOne(
         {_id: req.params.id},
         {$set : req.body}
@@ -82,7 +82,7 @@ app.put("/product/:id",verifyToken,async(req,resp)=>{
     resp.send(result);
 })
 
-app.get("/search/:key",verifyToken,async (req,resp) =>{
+app.get("/search/:key",async (req,resp) =>{
     let result = await Product.find({
         "$or":[
         {name:{ $regex:req.params.key}},
@@ -95,7 +95,14 @@ app.get("/search/:key",verifyToken,async (req,resp) =>{
 })
 
 
-
+app.get("/productByName/:name", async (req, resp) => {
+    let result = await Product.find({ name: req.params.name });
+    if (result && result.length > 0) {
+        resp.send(result);
+    } else {
+        resp.send({ result: "Does not contain any details" });
+    }
+});
 
 function verifyToken(req, resp, next) {
     let token = req.headers['authorization'];
